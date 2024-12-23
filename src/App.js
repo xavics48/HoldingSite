@@ -1,11 +1,19 @@
 import React from 'react';
-import { Button } from '@chakra-ui/react';
-
+import { Box, Button } from '@chakra-ui/react';
+import HeroSection from './components/HeroSection';
+import FinancialLiteracySection from './components/FinancialLiteracySection';
+import WealthManagementSection from './components/InvestmentSection';
+import AdvantagesSection from './components/AdvantagesSection';
 function App() {
   return (
-    <div style={{ textAlign: 'center', marginTop: '20px' }}>
-      <Button colorScheme="blue">Hello Chakra UI</Button>
-    </div>
+    <>
+      <Box bg="#FAF6EE" minH="100vh">
+      <HeroSection /> 
+      <FinancialLiteracySection />
+        <WealthManagementSection />
+        <AdvantagesSection />
+      </Box>
+    </>
   );
 }
 
