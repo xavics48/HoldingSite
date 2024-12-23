@@ -1,11 +1,14 @@
 import React from 'react';
 import { Button } from '@chakra-ui/react';
+import Navbar from './components/navbar/navbar';
+import theme from './theme';
+import { ChakraProvider } from '@chakra-ui/react';                                                                                                                                                                                                                                                                                                                                                                                              
 
 function App() {
   return (
-    <div style={{ textAlign: 'center', marginTop: '20px' }}>
-      <Button colorScheme="blue">Hello Chakra UI</Button>
-    </div>
+    <ChakraProvider theme={theme}>
+      <Navbar />
+    </ChakraProvider>
   );
 }
 
