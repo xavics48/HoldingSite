@@ -1,14 +1,21 @@
 import React from 'react';
-import { Button } from '@chakra-ui/react';
 import Navbar from './components/navbar/navbar';
-import theme from './theme';
-import { ChakraProvider } from '@chakra-ui/react';                                                                                                                                                                                                                                                                                                                                                                                              
-
+import { Box, Button } from '@chakra-ui/react';
+import HeroSection from './components/HeroSection';
+import FinancialLiteracySection from './components/FinancialLiteracySection';
+import WealthManagementSection from './components/InvestmentSection';
+import AdvantagesSection from './components/AdvantagesSection';
 function App() {
   return (
-    <ChakraProvider theme={theme}>
+    <>
+      <Box bg="#FAF6EE" minH="100vh">
       <Navbar />
-    </ChakraProvider>
+      <HeroSection /> 
+      <FinancialLiteracySection />
+        <WealthManagementSection />
+        <AdvantagesSection />
+      </Box>
+    </>
   );
 }
 
