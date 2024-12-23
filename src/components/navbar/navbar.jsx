@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, Box, Spacer, Button } from '@chakra-ui/react';
+import { Flex, Box, Spacer, Button, Text, Center } from '@chakra-ui/react';
 import NavbarItem from './navbarItem';
 import NavbarMenu from './navbarMenu';
 import LanguageSwitcher from './languageSwitcher';
@@ -39,8 +39,16 @@ const Navbar = () => {
       boxShadow={isScrolled ? 'md' : 'none'} // Add shadow when scrolled
     >
       {/* Logo */}
-      <Box >
-        <img src="/logo.png" alt="AIIMEEA" width="70px" height="30px" />
+      <Box
+        flex={1}
+        display="flex"
+        alignItems="center" // Align items vertically in the center
+        justifyContent="center" // Align items horizontally in the center
+      >
+        <img src="/logo.png" alt="AIIMEEA" width="50px" height="20px" />
+        <Text fontSize="xl" fontWeight="bold" color="black" ml="2">
+          AIIMEEA
+        </Text>
       </Box>
       <Box width="90px" />
       {/* Links */}
