@@ -31,7 +31,7 @@ const MessagingAppsComponent = () => {
                         width="100%"
                         backgroundColor={'blue.300'}
                     >
-                        Connect on Telegram
+                    
                     </Button>
                 </Link>
 
@@ -49,7 +49,7 @@ const MessagingAppsComponent = () => {
                         width="100%"
                         backgroundColor={'green.300'}
                     >
-                        Connect on WhatsApp
+                        
                     </Button>
                 </Link>
             </VStack>
