@@ -1,110 +1,114 @@
-import React, { useState, useEffect } from 'react';
-import { Flex, Box, Spacer, Button, Text, Center } from '@chakra-ui/react';
-import NavbarItem from './navbarItem';
-import NavbarMenu from './navbarMenu';
-import LanguageSwitcher from './languageSwitcher';
-import { LockIcon } from '@chakra-ui/icons';
+import React from 'react';
+import {
+  Box,
+  Flex,
+  HStack,
+  IconButton,
+  Button,
+  useDisclosure,
+  Stack,
+  Image,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { NavLink } from 'react-router-dom'; // Import NavLink for routing
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // Effect to track scroll position
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY; // Get the vertical scroll position
-      setIsScrolled(scrollTop > 50); // If scrolled more than 50px, set to true
-    };
+  const navLinks = [
+    { name: 'Home', href: '/' },
+    { name: 'Products', href: '/products' },
+    { name: 'Events & Live Streams', href: '/events' },
+    { name: 'Free Offers', href: '/offers' },
+    { name: 'Blog', href: '/blogs' },
+    { name: 'Contact', href: '/contact' },
+  ];
 
-    window.addEventListener('scroll', handleScroll);
-
-    // Cleanup function
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+  const linkBgHover = useColorModeValue('gray.700', 'gray.600');
+  const bgColor = useColorModeValue('gray.800', 'gray.900');
 
   return (
-    <Flex
-      as="nav"
-      align="center"
-      justify="space-between"
-      padding="1rem"
-      position="fixed" // Makes the navbar fixed at the top
-      top="0"
-      left="0"
-      right="0"
-      zIndex="1000" // Ensures it stays above other content
-      transition="background-color 0.3s ease" // Smooth transition effect
-      bg={isScrolled ? 'beige' : 'transparent'} // Background color on scroll
-      boxShadow={isScrolled ? 'md' : 'none'} // Add shadow when scrolled
-    >
-      {/* Logo */}
-      <Box
-        flex={1}
-        display="flex"
-        alignItems="center" // Align items vertically in the center
-        justifyContent="center" // Align items horizontally in the center
-      >
-        <img src="/logo.png" alt="AIIMEEA" width="50px" height="20px" />
-        <Text fontSize="xl" fontWeight="bold" color="black" ml="2">
-          AIIMEEA
-        </Text>
-      </Box>
-      <Box width="90px" />
-      {/* Links */}
-      <Flex align="center" gap={6}>
-        <NavbarMenu
-          label="Invest"
-          leftItems={[
-            {
-              label: 'Sample portfolio',
-              description: 'See for yourself how to invest',
-              link: '/sample-portfolio',
-            },
-            {
-              label: 'Child portfolio',
-              description: 'An investment in the future',
-              link: '/child-portfolio',
-            },
-            {
-              label: 'Pillar 3a',
-              description: 'Maximum convenience and return for your Pillar 3a',
-              link: '/pillar-3a',
-            },
-          ]}
-          rightItems={[
-            { label: 'Why True Wealth', link: '/why-true-wealth' },
-            { label: 'Who is it for?', link: '/who-is-it-for' },
-            { label: 'It’s that simple', link: '/its-that-simple' },
-            { label: 'Sustainability', link: '/sustainability' },
-          ]}
-        />
-        <NavbarItem label="Pricing" />
-        <NavbarItem label="Blog & News" />
-        <NavbarMenu
-          label="Company"
-          leftItems={[
-            { label: 'About us', link: '/about-us' },
-            { label: 'Press', link: '/press' },
-            { label: 'Help Center', link: '/help-center' },
-          ]}
-          rightItems={[]} // Empty right column for "Company"
+    <Box bg={bgColor} px={4} color="white">
+      <Flex h={16} alignItems="center" justifyContent="space-between">
+        {/* Logo */}
+        <HStack spacing={8} alignItems="center">
+          <Box>
+            <Image src="/logo.png" alt="Logo" boxSize="50px" />
+          </Box>
+
+          {/* Desktop Links */}
+          <HStack
+            as="nav"
+            spacing={4}
+            display={{ base: 'none', md: 'flex' }}
+          >
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.name}
+                to={link.href}
+                style={({ isActive }) => ({
+                  textDecoration: 'none',
+                  padding: '8px 12px',
+                  borderRadius: '5px',
+                  color: isActive ? 'yellow.300' : 'white',
+                  backgroundColor: isActive ? linkBgHover : 'transparent',
+                })}
+              >
+                {link.name}
+              </NavLink>
+            ))}
+          </HStack>
+        </HStack>
+
+        {/* CTA Button */}
+        <Flex alignItems="center">
+          <Button
+            bgGradient="linear(to-r, yellow.300, yellow.400)"
+            color="black"
+            _hover={{ bgGradient: 'linear(to-r, yellow.400, yellow.500)' }}
+            px={6}
+            py={2}
+            rounded="md"
+            animation="pulse 1.5s infinite"
+          >
+            Try Our Demo
+          </Button>
+        </Flex>
+
+        {/* Mobile Menu Button */}
+        <IconButton
+          size="md"
+          icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+          aria-label="Open Menu"
+          display={{ md: 'none' }}
+          onClick={isOpen ? onClose : onOpen}
         />
       </Flex>
 
-      <Spacer />
-
-      {/* Language Switcher */}
-      <LanguageSwitcher />
-
-      {/* Buttons */}
-      <Flex align="center" gap={4}>
-        <Button variant="outline" colorScheme="gray" leftIcon={<LockIcon />}>
-          Login
-        </Button>
-        <Button colorScheme="orange">Open Account</Button>
-      </Flex>
-    </Flex>
+      {/* Mobile Links */}
+      {isOpen ? (
+        <Box pb={4} display={{ md: 'none' }}>
+          <Stack as="nav" spacing={4}>
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.name}
+                to={link.href}
+                style={({ isActive }) => ({
+                  textDecoration: 'none',
+                  padding: '8px 12px',
+                  borderRadius: '5px',
+                  color: isActive ? 'yellow.300' : 'white',
+                  backgroundColor: isActive ? linkBgHover : 'transparent',
+                })}
+              >
+                {link.name}
+              </NavLink>
+            ))}
+          </Stack>
+        </Box>
+      ) : null}
+    </Box>
   );
 };
 

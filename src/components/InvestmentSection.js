@@ -1,206 +1,168 @@
 import React from "react";
-import { Box, Flex, Text, Heading, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Input, Button, Table, Tbody, Tr, Td, Th, Thead, VStack, HStack } from "@chakra-ui/react";
-import { PieChart } from "react-minimal-pie-chart";
+import {
+    Box,
+    Flex,
+    Text,
+    Heading,
+    Table,
+    Tbody,
+    Tr,
+    Td,
+    Th,
+    Thead,
+    VStack,
+    Button,
+} from "@chakra-ui/react";
+import { Bar } from "react-chartjs-2";
+import { useNavigate } from "react-router-dom";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from "chart.js";
+
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const WealthManagementSection = () => {
+    const navigate = useNavigate();
+
+    const barData = {
+        labels: ["Silver EA", "Gold EA", "Platinum EA"],
+        datasets: [
+            {
+                label: "Feature Allocation (%)",
+                data: [20, 30, 50], // Replace with actual data
+                backgroundColor: ["#C0C0C0", "#FFD700", "#B0C4DE"], // Silver, Gold, Platinum colors
+                borderWidth: 1,
+                borderColor: ["#999", "#CCAC00", "#8CA0BC"],
+            },
+        ],
+    };
+
+    const barOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: "top",
+            },
+            title: {
+                display: true,
+                text: "Feature Distribution Across Products",
+            },
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 10,
+                },
+            },
+        },
+    };
+
     return (
         <Box
             bg="white"
-            p={{ base: 6, md: 10 }}
+            p={{ base: 4, md: 8 }}
             maxW="1200px"
             mx="auto"
             boxShadow="md"
             rounded="md"
+            overflow="hidden" // Prevent horizontal overflow
         >
-            <Heading size="lg" mb={4}>
-                Wealth management. As simple as it gets.
+            {/* Section Title */}
+            <Heading size="lg" mb={4} textAlign="center">
+                Choose the Right EA for Your Trading Needs
             </Heading>
-            <Text color="gray.600" mb={8}>
-                You set the direction and keep full control over your investment
-                strategy. Let us do the work: Always diversified, highly automated and
-                thus much more efficient than investing has ever been.
+            <Text color="gray.600" mb={8} textAlign="center">
+                Explore our range of Expert Advisors designed to suit traders of all experience levels.
             </Text>
 
+            {/* Content Layout */}
             <Flex
                 direction={{ base: "column", lg: "row" }}
-                alignItems="center"
+                alignItems={{ base: "center", lg: "flex-start" }}
                 justifyContent="space-between"
-                gap={10}
+                gap={6} // Adjusted to avoid excessive spacing
+                w="100%" // Ensure full-width alignment
             >
-                {/* Left Section: Investment Inputs */}
-                <VStack align="start" spacing={6} flex="1">
-                    <Box w="full">
-                        <Text fontWeight="medium" mb={1}>
-                            Your investment amount{" "}
-                            <Text as="span" fontSize="sm" color="gray.500">
-                                (CHF)
-                            </Text>
-                        </Text>
-                        <Flex align="center" gap={2}>
-                            <Input
-                                type="number"
-                                value="100000"
-                                min={0}
-                                borderColor="gray.300"
-                                maxW="200px"
-                            />
-                            <Text fontWeight="bold">CHF</Text>
-                        </Flex>
+                {/* Left Section: Table */}
+                <Box flex="1" w="100%" overflowX="auto"> {/* Allow table scrolling on small screens */}
+                    <Heading size="md" mb={4} textAlign={{ base: "center", lg: "left" }}>
+                        Product Overview
+                    </Heading>
+                    <Table variant="simple" size="md" maxW="100%">
+                        <Thead>
+                            <Tr>
+                                <Th>Product</Th>
+                                <Th>Markets</Th>
+                                <Th>Features</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            <Tr>
+                                <Td>Silver EA</Td>
+                                <Td>XAU/USD, EUR/USD, CAD/USD</Td>
+                                <Td>
+                                    - Automated trading strategies<br />
+                                    - Perfect balance between risk and reward<br />
+                                    - Quick setup and easy customization
+                                </Td>
+                            </Tr>
+                            <Tr>
+                                <Td>Gold EA</Td>
+                                <Td>XAU/USD, EUR/USD, CAD/USD, S&P 500, Dow Jones, DAX</Td>
+                                <Td>
+                                    - Advanced market analysis and signal systems<br />
+                                    - Support for multiple asset classes<br />
+                                    - Increased profitability with cutting-edge algorithms
+                                </Td>
+                            </Tr>
+                            <Tr>
+                                <Td>Platinum EA</Td>
+                                <Td>
+                                    XAU/USD, EUR/USD, CAD/USD, S&P 500, Dow Jones, Nasdaq, Oil, Bitcoin
+                                </Td>
+                                <Td>
+                                    - Comprehensive market coverage<br />
+                                    - AI-powered trading strategies<br />
+                                    - Maximum flexibility and performance across all markets
+                                </Td>
+                            </Tr>
+                        </Tbody>
+                    </Table>
+                </Box>
+
+                {/* Right Section: Bar Chart */}
+                <VStack align="center" flex="1" w="100%" spacing={6}>
+                    <Heading size="md" textAlign="center">
+                        Feature Distribution
+                    </Heading>
+                    <Box w="100%" maxW={{ base: "300px", md: "500px" }} h="300px" overflow="hidden">
+                        <Bar data={barData} options={barOptions} />
                     </Box>
-
-                    <Box w="full">
-                        <Text fontWeight="medium" mb={1}>
-                            Your risk tolerance
-                        </Text>
-                        <Slider aria-label="risk-tolerance-slider" defaultValue={80}>
-                            <SliderTrack>
-                                <SliderFilledTrack bg="orange.400" />
-                            </SliderTrack>
-                            <SliderThumb />
-                        </Slider>
-                        <Text mt={2} fontSize="sm" color="gray.600">
-                            Aggressive (higher risk)
-                        </Text>
-                    </Box>
-
-                    <Text fontSize="sm" color="gray.600">
-                        Yearly fee: <strong>0.50%</strong> (per quarter: CHF 125)
-                        <br />
-                        Product Costs (Ø TER): <strong>0.13%</strong>
+                    <Text fontSize="sm" color="gray.600" textAlign="center">
+                        Distribution based on popularity and functionality.
                     </Text>
-                </VStack>
-
-                {/* Right Section: Investment Strategy */}
-                <VStack align="start" flex="1" spacing={6}>
-                    <Heading size="md">Investment Strategy</Heading>
-                    <Text fontSize="sm" color="gray.600">
-                        Sample strategy for investors with higher risk tolerance.
-                    </Text>
-                    <Flex direction={{ base: "column", md: "row" }} gap={6}>
-                        {/* Pie Chart */}
-                        <Box>
-                            <PieChart
-                                data={[
-                                    { title: "Cash", value: 1, color: "#787878" },
-                                    { title: "Bonds", value: 8, color: "#00a8df" },
-                                    { title: "Real Estate", value: 5, color: "#9dd600" },
-                                    { title: "Natural Resources", value: 4, color: "#ffea00" },
-                                    { title: "Equities", value: 82, color: "#dd8217" },
-                                ]}
-                                lineWidth={30}
-                                paddingAngle={5}
-                                radius={42}
-                                label={({ dataEntry }) => `${dataEntry.value}%`}
-                                labelStyle={{
-                                    fontSize: "6px",
-                                    fontWeight: "bold",
-                                    fill: "#fff",
-                                }}
-                                labelPosition={60}
-                            />
-                        </Box>
-
-                        {/* Table */}
-                        <Box>
-                            <Table variant="simple" size="sm">
-                                <Thead>
-                                    <Tr>
-                                        <Th>Asset Class</Th>
-                                        <Th textAlign="right">Allocation</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    <Tr>
-                                        <Td>
-                                            <HStack>
-                                                <Box
-                                                    w="10px"
-                                                    h="10px"
-                                                    bg="#787878"
-                                                    borderRadius="full"
-                                                />
-                                                <Text>Cash</Text>
-                                            </HStack>
-                                        </Td>
-                                        <Td textAlign="right">1%</Td>
-                                    </Tr>
-                                    <Tr>
-                                        <Td>
-                                            <HStack>
-                                                <Box
-                                                    w="10px"
-                                                    h="10px"
-                                                    bg="#00a8df"
-                                                    borderRadius="full"
-                                                />
-                                                <Text>Bonds</Text>
-                                            </HStack>
-                                        </Td>
-                                        <Td textAlign="right">8%</Td>
-                                    </Tr>
-                                    <Tr>
-                                        <Td>
-                                            <HStack>
-                                                <Box
-                                                    w="10px"
-                                                    h="10px"
-                                                    bg="#9dd600"
-                                                    borderRadius="full"
-                                                />
-                                                <Text>Real Estate Investment Trusts</Text>
-                                            </HStack>
-                                        </Td>
-                                        <Td textAlign="right">5%</Td>
-                                    </Tr>
-                                    <Tr>
-                                        <Td>
-                                            <HStack>
-                                                <Box
-                                                    w="10px"
-                                                    h="10px"
-                                                    bg="#ffea00"
-                                                    borderRadius="full"
-                                                />
-                                                <Text>Natural Resources</Text>
-                                            </HStack>
-                                        </Td>
-                                        <Td textAlign="right">4%</Td>
-                                    </Tr>
-                                    <Tr>
-                                        <Td>
-                                            <HStack>
-                                                <Box
-                                                    w="10px"
-                                                    h="10px"
-                                                    bg="#dd8217"
-                                                    borderRadius="full"
-                                                />
-                                                <Text>Equities</Text>
-                                            </HStack>
-                                        </Td>
-                                        <Td textAlign="right">82%</Td>
-                                    </Tr>
-                                    <Tr fontWeight="bold">
-                                        <Td>Total</Td>
-                                        <Td textAlign="right">100%</Td>
-                                    </Tr>
-                                </Tbody>
-                            </Table>
-                        </Box>
-                    </Flex>
                 </VStack>
             </Flex>
 
             {/* CTA */}
-            <Box mt={8} textAlign="left">
+            <Box mt={8} textAlign="center">
                 <Button
-                    bg="gray.100"
-                    color="gray.700"
-                    _hover={{ bg: "gray.200" }}
+                    bg="blue.500"
+                    color="white"
+                    _hover={{ bg: "blue.600" }}
                     px={8}
                     py={4}
+                    onClick={() => navigate("/products")}
                 >
-                    See sample portfolio
+                    Explore Our Products
                 </Button>
             </Box>
         </Box>
